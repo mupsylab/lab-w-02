@@ -1,0 +1,144 @@
+{
+  "name": "lab-w-02",
+  "version": "0.1.0",
+  "anthor": "mupsy",
+  "build": {
+    "appId": "lab-cas-09",
+    "productName": "lab-cas-09",
+    "icon": "public/favicon.ico",
+    "copyright": "Copyright © 2023",
+    "compression": "maximum",
+    "asar": true,
+    "win": {
+      "icon": "public/favicon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "legalTrademarks": "mupsy2023"
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 0,
+          "y": 0,
+          "path": "/Application"
+        }
+      ]
+    },
+    "linux": {
+      "icon": "public/favicon.ico"
+    },
+    "mac": {
+      "icon": "public/favicon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": false
+    },
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "**/*",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}",
+      "!**/src/components/**",
+      "!**/src/assets/**",
+      "!**/src/main.js",
+      "!**/src/App.vue",
+      "!**/public/index.html"
+    ]
+  },
+  "main": "src/electron-main.js",
+  "private": true,
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "start": "vue-cli-service build && electron .",
+    "dist": "vue-cli-service build && electron-builder --dir",
+    "pack": "vue-cli-service build && electron-builder --win",
+    "pack-x64": "vue-cli-service build && electron-builder --win --x64",
+    "pack-all": "vue-cli-service build && electron-builder -mwl"
+  },
+  "dependencies": {
+    "@jspsych/plugin-call-function": "^1.1.2",
+    "@jspsych/plugin-fullscreen": "^1.1.2",
+    "@jspsych/plugin-html-button-response": "^1.1.2",
+    "@jspsych/plugin-html-keyboard-response": "^1.1.1",
+    "@jspsych/plugin-instructions": "^1.1.2",
+    "@jspsych/plugin-preload": "^1.1.2",
+    "@jspsych/plugin-survey-html-form": "^1.0.2",
+    "core-js": "^3.8.3",
+    "jquery": "^3.6.3",
+    "jquery-ui-dist": "^1.13.2",
+    "jspsych": "^7.3.0",
+    "vue": "^3.2.13"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@babel/plugin-proposal-private-methods": "^7.18.6",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "electron": "^23.0.0",
+    "electron-builder": "^23.6.0",
+    "electron-packager": "^17.1.1",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {
+      "strict": "off",
+      "vue/no-unused-components": "off",
+      "generator-star-spacing": "off",
+      "no-debugger": "off",
+      "no-tabs": "off",
+      "no-unused-vars": "off",
+      "no-console": "off",
+      "no-irregular-whitespace": "off"
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "vue/no-unused-components": [
+    "error",
+    {
+      "ignoreWhenBindingPresent": true
+    }
+  ]
+}
