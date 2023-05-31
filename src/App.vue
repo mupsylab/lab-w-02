@@ -10,11 +10,13 @@ import jsPsychFullscreen from '@jspsych/plugin-fullscreen';
 import jsPsychSurveyHtmlForm from '@jspsych/plugin-survey-html-form';
 
 import Config from "@/config";
+import Naodao from "@/utils/naodao";
 
 import QuestionIdFirst from "@/components/Questionid1.vue";
 import QuestionIdSecond from "@/components/Questionid2.vue";
 import { h, createApp } from "vue";
 
+const naodao = new Naodao();
 const session = new Session({
   startTime: new Date().toLocaleDateString() + "-" + new Date().toLocaleTimeString(),
   experId: Config.experId,
@@ -26,22 +28,7 @@ const jsPsych = initJsPsych({
   on_finish: () => {
     session.addInfo("endTime", new Date().toLocaleDateString() + "-" + new Date().toLocaleTimeString());
     session.changeInfo("finish", true);
-    if (!Config.upload) {
-      session.offlineSave(session.t["getData"]().csv(), `${Config.experId}-ver${Config.version}-subj${session.getInfo("subjIdx")}`);
-      session.stopMonitor();
-    } else {
-      session.onlineSave(session.t["getData"]().csv(), `${Config.experId}-ver${Config.version}-subj${session.getInfo("subjIdx")}`, function () {
-        let DOM = jsPsych.DOM_container;
-        DOM.innerHTML = "当前正在上传数据，进度为：" + `${session.t.Config.uploadProgress}/${session.t.Config.uploadLength}`;
-        if (session.t.Config.uploadProgress == session.t.Config.uploadLength) {
-          DOM.innerHTML = "上传成功，可以关闭窗口啦～";
-          session.stopMonitor();
-        }
-      }, function () {
-        let DOM = jsPsych.DOM_container;
-        DOM.innerHTML = "上传失败，请联系研究人员。";
-      });
-    }
+    naodao.save();
   }
 });
 session.t = [
@@ -56,6 +43,10 @@ session.t = [
       ]))
   }
 ];
+naodao.getData = () => {
+  return session.t["getData"]().csv();
+}
+
 const timeline = [{
   timeline: [{
     type: jsPsychHtmlKeyboardResponse,
@@ -175,54 +166,54 @@ timeline.push({
   }
 });
 
-if (Config.html.indexOf("instruction_part1") < 0) Config.html.push("instruction_part1");
-timeline.push({
-  type: jsPsychHtmlButtonResponse,
-  stimulus: () => {
-    return session.html["instruction_part1"]
-  },
-  choices: ["继续"]
-}, {
-  type: jsPsychCallFunction,
-  func: () => {
-    session.t = [
-      "nowQ",
-      0
-    ];
-  }
-}, {
-  timeline: [{
-    type: jsPsychSurveyHtmlForm,
-    html: () => {
-      return "<div id='Tbox'></div>";
-    },
-    button_label: "继续",
-    on_load: () => {
-      let now = Config.question1[session.t["nowQ"]];
-      createApp(h(QuestionIdFirst, {
-        id: session.t["nowQ"] + 1,
-        title: now.text,
-        choices: now.choices.split("-")
-      })).mount("#Tbox");
-      let cc = document.querySelector("#jspsych-survey-html-form-next");
-      cc.style.position = "relative";
-      cc.style.left = `calc(50% - ${cc.clientWidth / 2}px)`;
-    },
-    on_finish: (data) => {
-      Object.keys(data.response).forEach(v => {
-        jsPsych.data.write({
-          save: true,
-          questionId: v,
-          answer: data.response[v]
-        });
-      })
-      session.t["nowQ"]++;
-    }
-  }],
-  loop_function: () => {
-    return session.t["nowQ"] < Config.question1.length;
-  }
-});
+// if (Config.html.indexOf("instruction_part1") < 0) Config.html.push("instruction_part1");
+// timeline.push({
+//   type: jsPsychHtmlButtonResponse,
+//   stimulus: () => {
+//     return session.html["instruction_part1"]
+//   },
+//   choices: ["继续"]
+// }, {
+//   type: jsPsychCallFunction,
+//   func: () => {
+//     session.t = [
+//       "nowQ",
+//       0
+//     ];
+//   }
+// }, {
+//   timeline: [{
+//     type: jsPsychSurveyHtmlForm,
+//     html: () => {
+//       return "<div id='Tbox'></div>";
+//     },
+//     button_label: "继续",
+//     on_load: () => {
+//       let now = Config.question1[session.t["nowQ"]];
+//       createApp(h(QuestionIdFirst, {
+//         id: session.t["nowQ"] + 1,
+//         title: now.text,
+//         choices: now.choices.split("-")
+//       })).mount("#Tbox");
+//       let cc = document.querySelector("#jspsych-survey-html-form-next");
+//       cc.style.position = "relative";
+//       cc.style.left = `calc(50% - ${cc.clientWidth / 2}px)`;
+//     },
+//     on_finish: (data) => {
+//       Object.keys(data.response).forEach(v => {
+//         jsPsych.data.write({
+//           save: true,
+//           questionId: v,
+//           answer: data.response[v]
+//         });
+//       })
+//       session.t["nowQ"]++;
+//     }
+//   }],
+//   loop_function: () => {
+//     return session.t["nowQ"] < Config.question1.length;
+//   }
+// });
 
 if (Config.html.indexOf("instruction_part2") < 0) Config.html.push("instruction_part2");
 timeline.push({

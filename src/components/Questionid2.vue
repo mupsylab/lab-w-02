@@ -28,7 +28,9 @@ export default {
         }
     },
     methods: {
-
+        input_re(e) {
+            e.target.value = e.target._value;
+        }
     },
     setup() {
         return {}
@@ -39,6 +41,9 @@ export default {
     mounted() {
         $(".wo").on("mouseup", (e) => {
             if ($(".wo[draging=yes]").length) {
+                $("input").each((i, v) => {
+                    v.setCustomValidity('')
+                });
                 const from = $(".wo[draging=yes]").data().id - 1;
                 const to = $(e.target).data().id - 1;
                 let newArr = [];
@@ -94,22 +99,22 @@ export default {
         <div class="r" style="grid-area: 1 / 2 / 2 / 10;">
             <div class="num">1</div>
             <div class="wo" data-id="1">{{ fRes[0] }}</div>
-            <input type="text" :name="`sort_q${id}_1`" id="a1" :value="active[0]" required />
+            <input type="text" :name="`sort_q${id}_1`" id="a1" :value="active[0]" required @input="input_re" oninvalid="setCustomValidity('请拖动左边的选项进行排序')" />
         </div>
         <div class="r" style="grid-area: 2 / 2 / 3 / 10;">
             <div class="num">2</div>
             <div class="wo" data-id="2">{{ fRes[1] }}</div>
-            <input type="text" :name="`sort_q${id}_2`" id="a2" :value="active[1]" required />
+            <input type="text" :name="`sort_q${id}_2`" id="a2" :value="active[1]" required @input="input_re" oninvalid="setCustomValidity('请拖动左边的选项进行排序')" />
         </div>
         <div class="r" style="grid-area: 3 / 2 / 4 / 10;">
             <div class="num">3</div>
             <div class="wo" data-id="3">{{ fRes[2] }}</div>
-            <input type="text" :name="`sort_q${id}_3`" id="a3" :value="active[2]" required />
+            <input type="text" :name="`sort_q${id}_3`" id="a3" :value="active[2]" required @input="input_re" oninvalid="setCustomValidity('请拖动左边的选项进行排序')" />
         </div>
         <div class="r" style="grid-area: 4 / 2 / 5 / 10;">
             <div class="num">4</div>
             <div class="wo" data-id="4">{{ fRes[3] }}</div>
-            <input type="text" :name="`sort_q${id}_4`" id="a4" :value="active[3]" required />
+            <input type="text" :name="`sort_q${id}_4`" id="a4" :value="active[3]" required @input="input_re" oninvalid="setCustomValidity('请拖动左边的选项进行排序')" />
         </div>
     </div>
 </template>
